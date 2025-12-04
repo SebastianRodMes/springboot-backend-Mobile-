@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.dto.ApiResponse;
 import com.example.demo.dto.AuthResponse;
 import com.example.demo.dto.LoginRequest;
 import com.example.demo.dto.SignUpRequest;
@@ -20,33 +21,32 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@RequestBody SignUpRequest request){
-        try{
+    public ResponseEntity<ApiResponse<UserModel>> signup(@RequestBody SignUpRequest request) {
+        try {
             UserModel user = authService.signup(request);
-            return ResponseEntity.ok("Usuario registrado exitosamente: " + user.getEmail());
-
-        }catch(IllegalArgumentException e){
-             return ResponseEntity.badRequest().body(e.getMessage());
-
+            return ResponseEntity.ok(
+                    ApiResponse.success("Usuario registrado exitosamente", user));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.badRequest(e.getMessage()));
         } catch (Exception e) {
-            // Cualquier otro error
-            return ResponseEntity.status(500).body("Error al registrar usuario: " + e.getMessage());
+            return ResponseEntity.status(500).body(
+                    ApiResponse.serverError("Error al registrar usuario: " + e.getMessage()));
         }
-    
     }
-
 
     @PostMapping("/login")
-    public ResponseEntity<?> login (@RequestBody LoginRequest request){
-        try{
+    public ResponseEntity<ApiResponse<AuthResponse>> login(@RequestBody LoginRequest request) {
+        try {
             AuthResponse response = authService.login(request);
-            return ResponseEntity.ok(response);
-        }catch(IllegalArgumentException e){
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }catch(Exception e){
-           return ResponseEntity.status(500).body("Error al iniciar sesión: " + e.getMessage());
+            return ResponseEntity.ok(
+                    ApiResponse.success("Login exitoso", response));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.badRequest(e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(
+                    ApiResponse.serverError("Error al iniciar sesión: " + e.getMessage()));
         }
     }
-
-    
 }
