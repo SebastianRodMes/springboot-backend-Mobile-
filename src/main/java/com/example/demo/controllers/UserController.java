@@ -53,4 +53,17 @@ public class UserController {
                     .body(ApiResponse.badRequest("No se pudo eliminar el usuario con id " + id));
         }
     }
+
+    @GetMapping("/email/{email}")
+    public ResponseEntity<ApiResponse<Long>> getByEmail(@PathVariable("email") String email) {
+        try {
+            UserModel user = userService.findByEmail(email);
+            return ResponseEntity.ok(ApiResponse.success(user.getId()));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(ApiResponse.badRequest(e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(500)
+                    .body(ApiResponse.serverError("Error al obtener el usuario: " + e.getMessage()));
+        }
+    }
 }

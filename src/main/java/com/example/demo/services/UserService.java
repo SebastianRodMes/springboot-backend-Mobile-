@@ -18,20 +18,25 @@ public class UserService {
     }
 
     public UserModel saveUser(UserModel user) {
-       
+
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new IllegalArgumentException("El email ya existe xd");
         }
         return userRepository.save(user);
-    }   
-    
+    }
+
     public boolean deleteUser(Long id) {
-       try {
-           userRepository.deleteById(id);
-           return true;
-       } catch (Exception e) {
-           return false;
-       }
+        try {
+            userRepository.deleteById(id);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public UserModel findByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado con email: " + email));
     }
 
 }
