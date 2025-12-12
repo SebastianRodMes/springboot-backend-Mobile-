@@ -34,25 +34,23 @@ public class AuthService {
         user.setAddress(request.getAddress());
         user.setContractNumber(request.getContractNumber());
 
-
         // hasheamos la contraseña
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         // guardamos en la bd
         return userRepository.save(user);
     }
 
+    public AuthResponse login(LoginRequest request) {
 
-    public AuthResponse login (LoginRequest request){
-
-        UserModel user = userRepository.findByEmail(request.getEmail()).orElseThrow(() 
-        -> new IllegalArgumentException("Email o contraseña incorrectos"));
-        //verificar contraseña
-        if(! passwordEncoder.matches(request.getPassword(), user.getPassword())){
+        UserModel user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new IllegalArgumentException("Email o contraseña incorrectos"));
+        // verificar contraseña
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new IllegalArgumentException("Email o contraseña incorrectos");
         }
         String token = jwtUtil.generateToken(user.getEmail(), user.getId());
 
-        return new AuthResponse(token, user.getEmail(), user.getFullName());
+        return new AuthResponse(token, user.getEmail(), user.getFullName(), user.getId());
     }
 
 }
