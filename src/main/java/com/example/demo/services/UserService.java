@@ -39,4 +39,9 @@ public class UserService {
                 .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado con email: " + email));
     }
 
+        public UserModel findAddressByEmail(String email) {
+        return userRepository.findAddressByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado con email: " + email));
+    }
+
 }

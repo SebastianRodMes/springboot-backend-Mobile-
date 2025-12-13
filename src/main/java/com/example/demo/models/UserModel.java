@@ -22,10 +22,9 @@ public class UserModel {
     private String phoneNumber;
     private String address;
 
-    @ElementCollection
-    @CollectionTable(name = "user_tickets", joinColumns = @JoinColumn(name = "user_id"))
-    @Column(name = "ticket")
-    private List<String> tickets;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @com.fasterxml.jackson.annotation.JsonIgnore
+    private List<TicketModel> tickets;
 
     @Column(unique = true, nullable = false)
     private String contractNumber;
@@ -87,11 +86,11 @@ public class UserModel {
         this.address = address;
     }
 
-    public List<String> getTickets() {
+    public List<TicketModel> getTickets() {
         return tickets;
     }
 
-    public void setTickets(List<String> tickets) {
+    public void setTickets(List<TicketModel> tickets) {
         this.tickets = tickets;
     }
 

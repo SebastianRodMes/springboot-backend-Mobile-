@@ -119,4 +119,24 @@ public class TicketController {
                     .body(ApiResponse.serverError("Error al eliminar ticket: " + e.getMessage()));
         }
     }
+
+    // Actualizar detalles del ticket
+    @PutMapping("/{ticketId}/details")
+    public ResponseEntity<ApiResponse<TicketModel>> updateTicketDetails(
+            @PathVariable Long ticketId,
+            @RequestBody TicketModel ticketUpdates) {
+        try {
+            TicketModel updatedTicket = ticketService.updateTicketDetails(
+                    ticketId,
+                    ticketUpdates.getDescription(),
+                    ticketUpdates.getPhotoUrl(),
+                    ticketUpdates.getSubcategory());
+            return ResponseEntity.ok(ApiResponse.success("Ticket actualizado exitosamente", updatedTicket));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(ApiResponse.badRequest(e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(500)
+                    .body(ApiResponse.serverError("Error al actualizar ticket: " + e.getMessage()));
+        }
+    }
 }
