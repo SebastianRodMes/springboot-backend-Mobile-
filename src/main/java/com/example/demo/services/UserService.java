@@ -17,6 +17,8 @@ public class UserService {
         return (List<UserModel>) userRepository.findAll(); // se hace un casteo a List<UserModel>
     }
 
+   
+
     public UserModel saveUser(UserModel user) {
 
         if (userRepository.existsByEmail(user.getEmail())) {
@@ -39,9 +41,6 @@ public class UserService {
                 .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado con email: " + email));
     }
 
-        public UserModel findAddressByEmail(String email) {
-        return userRepository.findAddressByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado con email: " + email));
-    }
+
 
 }

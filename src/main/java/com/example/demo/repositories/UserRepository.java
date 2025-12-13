@@ -20,6 +20,6 @@ public interface UserRepository extends CrudRepository<UserModel, Long> {
     // Evita null y es más seguro
     Optional<UserModel> findByEmail(String email);
 
-     Optional<UserModel> findAddressByEmail(String email);
+    
 
 }

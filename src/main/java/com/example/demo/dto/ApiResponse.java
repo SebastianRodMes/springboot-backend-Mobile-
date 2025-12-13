@@ -24,6 +24,9 @@ public class ApiResponse<T> {
         return new ApiResponse<>(200, "Success", data);
     }
 
+      // Métodos estáticos para crear respuestas comunes
+ 
+
     public static <T> ApiResponse<T> success(String message, T data) {
         return new ApiResponse<>(200, message, data);
     }

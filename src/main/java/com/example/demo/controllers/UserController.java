@@ -1,6 +1,8 @@
 package com.example.demo.controllers;
 
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -55,10 +57,14 @@ public class UserController {
     }
 
     @GetMapping("/email/{email}")
-    public ResponseEntity<ApiResponse<Long>> getByEmail(@PathVariable("email") String email) {
+    public ResponseEntity<ApiResponse<Map<String, Object>>> getByEmail(@PathVariable("email") String email) {
         try {
             UserModel user = userService.findByEmail(email);
-            return ResponseEntity.ok(ApiResponse.success(user.getId()));
+            Map<String, Object> responseData = new HashMap<>();
+            responseData.put("id", user.getId());
+            responseData.put("email", user.getEmail());
+            responseData.put("address", user.getAddress());
+            return ResponseEntity.ok(ApiResponse.success(responseData));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(ApiResponse.badRequest(e.getMessage()));
         } catch (Exception e) {
